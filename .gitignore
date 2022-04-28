@@ -1,0 +1,6 @@
+*.suo
+*.cache
+
+CYDecrypt/bin
+CYDecrypt/.vs
+CYDecrypt/obj
