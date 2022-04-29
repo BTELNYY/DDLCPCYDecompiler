@@ -26,6 +26,8 @@ namespace CYDecrypt
                 ReadKey("Press any key to exit....");
                 Environment.Exit(0);
             }
+            Console.WriteLine("Looks like all check have been passed.");
+            Logger.WriteInfo("Using key: " + BitConverter.ToString(Key));
             while (true)
             {
                 Console.WriteLine("Decrypt \"all\" or \"single\"?");
@@ -37,6 +39,9 @@ namespace CYDecrypt
                         XORHandler.DecryptAllFiles();
                         break;
                     case "single":
+                        Console.WriteLine("Please enter the name of the file you want to decrypt.");
+                        string file_name = ReadInput("> ");
+                        XORHandler.DecryptFile(file_name);
                         break;
                     default:
                         WriteLineColor("Invalid Input", ConsoleColor.Red);
@@ -45,17 +50,17 @@ namespace CYDecrypt
             }
         }
 
-        private static string ReadInput(string carrot)
+        public static string ReadInput(string carrot)
         {
             Console.Write(carrot);
             return Console.ReadLine();
         }
-        private static string ReadKey(string carrot)
+        public static string ReadKey(string carrot)
         {
             Console.Write(carrot);
             return Console.ReadKey().ToString();
         }
-        private static void WriteLineColor(string text, ConsoleColor color)
+        public static void WriteLineColor(string text, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(text);

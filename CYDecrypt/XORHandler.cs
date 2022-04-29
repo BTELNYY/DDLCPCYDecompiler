@@ -26,6 +26,51 @@ namespace CYDecrypt
             }
             return xor;
         }
+        public static void DecryptFile(string inputFile)
+        {
+            string fileParsed;
+            string[] files = Directory.GetFiles(Program.FolderPath, "*.cy");
+            //cant find the file.
+            if (!File.Exists(Program.FolderPath + inputFile))
+            {
+                //try adding .cy suffix
+                if (!File.Exists(Program.FolderPath + inputFile + ".cy"))
+                {
+                    Program.WriteLineColor("File not found.", ConsoleColor.Red);
+                    return;
+                }
+                else
+                {
+                    fileParsed = Program.FolderPath + inputFile + ".cy";
+                }
+            }
+            else
+            {
+                fileParsed = Program.FolderPath + inputFile;
+            }
+            
+            try
+            {
+                if (File.Exists(fileParsed + ".bin"))
+                {
+                    Logger.WriteWarning("File: " + fileParsed + ".bin" + " already exists. overwriting...");
+                    File.Delete(fileParsed + ".bin");
+                }
+                byte[] filebytes;
+                filebytes = File.ReadAllBytes(fileParsed);
+                string[] fileparts = fileParsed.Split('\\');
+                string filename = fileparts.Last();
+                Logger.WriteInfo("Decrypting " + filename + "...");
+                byte[] decrypted = DecryptBytes(filebytes, Program.Key);
+                File.WriteAllBytes(fileParsed + ".bin", decrypted);
+                Logger.WriteInfo("Wrote new file " + fileParsed + ".bin");
+            }
+            catch (Exception e)
+            {
+                Logger.WriteError("Failed decrypting file: " + fileParsed + " Error: " + e.Message);
+            }
+
+        }
         public static void DecryptAllFiles()
         {
             string[] files = Directory.GetFiles(Program.FolderPath, "*.cy");
@@ -33,17 +78,22 @@ namespace CYDecrypt
             {
                 try
                 {
+                    if (File.Exists(file + ".bin"))
+                    {
+                        Logger.WriteWarning("File: " + file + ".bin" + " already exists. overwriting...");
+                        File.Delete(file + ".bin");
+                    }
                     byte[] filebytes;
                     filebytes = File.ReadAllBytes(file);
-                    string[] fileparts = file.Split('.');
-                    string filename = fileparts[0];
-                    Directory.CreateDirectory(Program.FolderPath + filename);
+                    string[] fileparts = file.Split('\\');
+                    string filename = fileparts.Last();
+                    Logger.WriteInfo("Decrypting " + filename + "...");
                     byte[] decrypted = DecryptBytes(filebytes, Program.Key);
                     File.WriteAllBytes(file + ".bin", decrypted);
-                    Logger.WriteInfo("Wrote file " + file + ".bin");
+                    Logger.WriteInfo("Wrote new file " + file + ".bin");
                 }catch(Exception e)
                 {
-                    Logger.WriteError("Failed decrypting file: " + file + "Error: " + e.Message);
+                    Logger.WriteError("Failed decrypting file: " + file + " Error: " + e.Message);
                 }
             }
         }
