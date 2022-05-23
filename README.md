@@ -18,6 +18,6 @@ Download the latest file from the release section [here](https://github.com/BTEL
 * `single` implies you must enter a file name (the .cy is optional)
 * `all` will just decrypt all of the files
 5. Assuming there are no errors, you will need to navigate to `Doki Doki Literature Club Plus_Data\StreamingAssets\AssetBundles\Windows\`
-6. the decrypted files will have the same name but have a .bin extension. These can be opened by external tools. (You can also rename them, if you want.)!
+6. the decrypted files will have the same name but have a `.bin` extension. These can be opened by external tools. (You can also rename them, if you want.)
  
 
